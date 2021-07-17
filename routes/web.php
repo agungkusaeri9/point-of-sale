@@ -24,5 +24,8 @@ Route::middleware(['auth'])->group(function () {
 
     // suppliers
     Route::resource('suppliers', 'SupplierController')->except('show');
+
+    // customers
+    Route::resource('customers', 'CustomerController')->except('show');
 });
 
