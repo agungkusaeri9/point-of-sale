@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -14,22 +16,11 @@ class UserController extends Controller
      */
     public function index()
     {
+        $users = User::orderBy('name','ASC')->get();
         return view('pages.users.index',[
-            'title' => 'Data Users'
+            'title' => 'Data Users',
+            'users' => $users
         ]);
-    }
-
-    public function data()
-    {
-        $users = User::query();
-        return datatables()->of($users)
-            ->addIndexColumn()
-            ->addColumn('role', function($users){
-                return $users->getRoleNames()->first();
-            })
-            ->addColumn('action', 'pages.users.action')
-            ->rawColumns(['action'])
-            ->toJson();
     }
 
     /**
@@ -39,7 +30,11 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        $roles = Role::get();
+        return view('pages.users.create',[
+            'title' => 'Create new users',
+            'roles' => $roles
+        ]);
     }
 
     /**
@@ -52,8 +47,8 @@ class UserController extends Controller
     {
         request()->validate([
             'name' => ['required','min:3'],
-            'username' => ['required','unique:users,email'],
-            'email' => ['required','email'],
+            'username' => ['required','unique:users,username','alpha_dash'],
+            'email' => ['required','email','unique:users,email'],
             'password' => ['required','min:3'],
             'role' => ['required','in:admin,kasir'],
         ]);
@@ -62,7 +57,7 @@ class UserController extends Controller
         $user = User::create($data);
         $user->assignRole(request('role'));
 
-        return response()->json(['code'=>200, 'message'=>'User Created successfully','data' => $user], 200);
+        return redirect()->route('users.index')->with('success','User berhasil dibuat');
     }
 
     /**
@@ -84,7 +79,13 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+        $roles = Role::get();
+        $user = User::findOrFail($id);
+        return view('pages.users.edit',[
+            'title' => 'Edit User',
+            'roles' => $roles,
+            'user' => $user
+        ]);
     }
 
     /**
@@ -96,7 +97,24 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $user = User::findOrFail($id);
+        request()->validate([
+            'name' => ['required','min:3'],
+            'username' => ['required',Rule::unique('users','username')->ignore($id),'alpha_dash'],
+            'email' => ['required','email',Rule::unique('users','email')->ignore($id)],
+            'role' => ['required','in:admin,kasir'],
+        ]);
+        $data = request()->all();
+        if(request('password'))
+        {
+            $data['password'] = bcrypt(request('password'));
+        }else{
+            $data['password'] = $user->password;
+        }
+        $user->update($data);
+        $user->syncRoles(request('role'));
+
+        return redirect()->route('users.index')->with('success','User berhasil diupdate');
     }
 
     /**
@@ -107,6 +125,8 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = User::findOrFail($id);
+        $user->delete();
+        return redirect()->route('users.index')->with('success','User berhasil dihapus');
     }
 }

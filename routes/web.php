@@ -20,7 +20,6 @@ Auth::routes(['register' => false]);
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard','DashboardController@index')->name('dashboard');
     // users
-    Route::get('/users/data', 'UserController@data')->name('users.data');
-    Route::resource('users', 'UserController');
+    Route::resource('users', 'UserController')->middleware('role:admin');
 });
 

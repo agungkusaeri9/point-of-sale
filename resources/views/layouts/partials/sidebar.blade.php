@@ -77,6 +77,7 @@
           </li>
 
           <li class="nav-header">Setting</li>
+          @role('admin')
           <li class="nav-item">
             <a href="{{ route('users.index') }}" class="nav-link">
               <i class="nav-icon fas fa-user"></i>
@@ -85,6 +86,7 @@
               </p>
             </a>
           </li>
+          @endrole
 
           {{-- logout --}}
           <li class="nav-item">
