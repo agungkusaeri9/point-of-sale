@@ -20,6 +20,9 @@ Auth::routes(['register' => false]);
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard','DashboardController@index')->name('dashboard');
     // users
-    Route::resource('users', 'UserController')->middleware('role:admin');
+    Route::resource('users', 'UserController')->except('show')->middleware('role:admin');
+
+    // suppliers
+    Route::resource('suppliers', 'SupplierController')->except('show');
 });
 

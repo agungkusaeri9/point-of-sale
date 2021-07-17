@@ -75,8 +75,8 @@
                             </div>
                         </div>
                         <div class="modal-footer">
+                            <a href="{{ route('users.index') }}" class="btn btn-secondary">Kembali</a>
                             <button type="submit" class="btn btn-primary px-3">Update</button>
-                            <button type="reset" class="btn btn-secondary">Reset</button>
                         </div>
                     </form>
                 </div>

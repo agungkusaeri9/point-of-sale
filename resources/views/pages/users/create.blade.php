@@ -74,8 +74,8 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary px-3">Simpan</button>
                             <button type="reset" class="btn btn-secondary">Reset</button>
+                            <button type="submit" class="btn btn-primary px-3">Simpan</button>
                         </div>
                     </form>
                 </div>
