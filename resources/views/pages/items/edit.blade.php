@@ -10,7 +10,7 @@
                     </h6>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('items.update', $item->id) }}" method="post" id="form">
+                    <form action="{{ route('items.update', $item->id) }}" method="post" id="form" enctype="multipart/form-data">
                         @csrf
                         @method('patch')
                         <div class="form-group">
@@ -68,8 +68,22 @@
                                 </div>
                             @enderror
                         </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <img src="{{ $item->image() }}" alt="" class="img-fluid" style="max-height: 150px;max-width:150px">
+                            </div>
+                            <div class="col-md-9">
+                                <label for="image">Gambar Baru</label>
+                                <input type="file" name="image" class="form-control @error('image') is-invalid @enderror" value="{{ old('image') }}">
+                                @error('image')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                        </div>
                         <div class="form-group float-right">
-                            <button type="reset" class="btn btn-secondary">Reset</button>
+                            <a href="{{ route('items.index') }}" class="btn btn-secondary">Kembali</a>
                             <button type="submit" class="btn btn-primary px-3">Simpan</button>
                         </div>
                     </form>

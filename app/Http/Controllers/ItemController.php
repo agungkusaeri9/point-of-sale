@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Item;
 use App\Models\Unit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
@@ -57,6 +58,12 @@ class ItemController extends Controller
             'price' => ['required','numeric']
         ]);
         $data = request()->all();
+        if(request()->file('image'))
+        {
+            $data['image'] = request()->file('image')->store('products','public');
+        }else{
+            $data['image'] = NULL;
+        }
         $data['slug'] = Str::slug(request('name'));
         Item::create($data);
         return redirect()->route('items.index')->with('success','Item berhasil ditambahkan');
@@ -111,6 +118,13 @@ class ItemController extends Controller
         $data = request()->all();
         $data['slug'] = Str::slug(request('name'));
         $item = Item::findOrFail($id);
+        if(request()->file('image'))
+        {
+            $data['image'] = request()->file('image')->store('products','public');
+            Storage::disk('public')->delete($item->image);
+        }else{
+            $data['image'] = $item->image;
+        }
         $item->update($data);
         return redirect()->route('items.index')->with('success','Item berhasil diupdate');
     }
@@ -123,7 +137,9 @@ class ItemController extends Controller
      */
     public function destroy($id)
     {
-        Item::destroy($id);
+        $item = Item::findOrFail($id);
+        $item->delete();
+        Storage::disk('public')->delete($item->image);
         return redirect()->route('items.index')->with('success','Item berhasil dihapus');
     }
 }

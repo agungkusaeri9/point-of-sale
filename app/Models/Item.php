@@ -17,4 +17,13 @@ class Item extends Model
     {
         return $this->belongsTo(Unit::class);
     }
+    public function image()
+    {
+        if($this->image !== NULL)
+        {
+            return asset('storage/' . $this->image);
+        }else{
+            return 'https://via.placeholder.com/150';
+        }
+    }
 }

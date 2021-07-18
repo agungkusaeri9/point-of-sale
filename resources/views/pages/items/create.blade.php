@@ -10,7 +10,7 @@
                     </h6>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('items.store') }}" method="post" id="form">
+                    <form action="{{ route('items.store') }}" method="post" id="form" enctype="multipart/form-data">
                         @csrf
                         <div class="form-group">
                             <label for="barcode">Barcode*</label>
@@ -57,11 +57,20 @@
                                     {{ $message }}
                                 </div>
                             @enderror
-                            </div>
+                        </div>
                         <div class="form-group">
                             <label for="price">Price*</label>
                             <input type="number" name="price" class="form-control @error('price') is-invalid @enderror" value="{{ old('price') }}">
                             @error('price')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+                        <div class="form-group">
+                            <label for="image">Image</label>
+                            <input type="file" name="image" class="form-control @error('image') is-invalid @enderror" value="{{ old('image') }}">
+                            @error('image')
                                 <div class="invalid-feedback">
                                     {{ $message }}
                                 </div>
