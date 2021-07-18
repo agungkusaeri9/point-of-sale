@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Customer;
+use App\Models\Unit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
-class CustomerController extends Controller
+class UnitController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,10 +16,10 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        $customers = Customer::orderBy('name','ASC')->get();
-        return view('pages.customers.index',[
-            'title' => 'Data Customers',
-            'customers' => $customers
+        $units = Unit::orderBy('name','ASC')->get();
+        return view('pages.units.index',[
+            'title' => 'Data Unit',
+            'units' => $units
         ]);
     }
 
@@ -29,8 +30,8 @@ class CustomerController extends Controller
      */
     public function create()
     {
-        return view('pages.customers.create',[
-            'title' => 'Tambah Customer',
+        return view('pages.units.create',[
+            'title' => 'Tambah Unit',
         ]);
     }
 
@@ -43,15 +44,13 @@ class CustomerController extends Controller
     public function store(Request $request)
     {
         request()->validate([
-            'name' => ['required','min:3'],
-            'phone_number' => ['required','unique:customers,phone_number'],
-            'gender' => ['required','in:L,P'],
-            'address' => ['required','min:5'],
+            'name' => ['required','unique:units,name','min:3']
         ]);
-        $data = request()->all();
-        Customer::create($data);
-
-        return redirect()->route('customers.index')->with('success','Customer berhasil ditambahkan');
+        Unit::create([
+            'name' => request('name'),
+            'slug' => Str::slug(request('name'))
+        ]);
+        return redirect()->route('units.index')->with('success','Unit berhasil ditambahkan');
     }
 
     /**
@@ -73,10 +72,10 @@ class CustomerController extends Controller
      */
     public function edit($id)
     {
-        $customer = Customer::findOrFail($id);
-        return view('pages.customers.edit',[
-            'title' => 'Edit Customer',
-            'customer' => $customer
+        $unit = Unit::findOrFail($id);
+        return view('pages.units.edit',[
+            'title' => 'Edit Unit',
+            'unit' => $unit
         ]);
     }
 
@@ -90,16 +89,13 @@ class CustomerController extends Controller
     public function update(Request $request, $id)
     {
         request()->validate([
-            'name' => ['required','min:3'],
-            'phone_number' => ['required',Rule::unique('customers','phone_number')->ignore($id)],
-            'gender' => ['required','in:L,P'],
-            'address' => ['required','min:5'],
+            'name' => ['required',Rule::unique('units','name')->ignore($id),'min:3']
         ]);
-        $customer = Customer::findOrFail($id);
-        $data = request()->all();
-        $customer->update($data);
-
-        return redirect()->route('customers.index')->with('success','Customer berhasil diupdate');
+        Unit::where('id', $id)->update([
+            'name' => request('name'),
+            'slug' => Str::slug(request('name'))
+        ]);
+        return redirect()->route('units.index')->with('success','Unit berhasil diupdate');
     }
 
     /**
@@ -110,8 +106,7 @@ class CustomerController extends Controller
      */
     public function destroy($id)
     {
-        $customer = Customer::findOrFail($id);
-        $customer->delete();
-        return redirect()->route('customers.index')->with('success','Csuustomer berhasil dihapus');
+        Unit::destroy($id);
+        return redirect()->route('units.index')->with('success','Unit berhasil dihapus');
     }
 }

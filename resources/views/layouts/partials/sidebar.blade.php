@@ -23,7 +23,7 @@
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
           <li class="nav-item">
-            <a href="{{ route('dashboard') }}" class="nav-link">
+            <a href="{{ route('dashboard') }}" class="nav-link @if(Route::currentRouteName() === 'dashboard') active @endif">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 Dashboard
@@ -31,20 +31,20 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="{{ route('suppliers.index') }}" class="nav-link">
+            <a href="{{ route('suppliers.index') }}" class="nav-link @if(Route::currentRouteName() === 'suppliers.index' || Route::currentRouteName() === 'suppliers.create' || Route::currentRouteName() === 'suppliers.edit') active @endif">
               <i class="nav-icon fas fa-truck"></i>
               <p>
                 Suppliers
-                <i class="fas fa-angle-left right"></i>
+                <span class="badge badge-info right">{{ \App\Models\Supplier::count() }}</span>
               </p>
             </a>
           </li>
           <li class="nav-item">
-            <a href="{{ route('customers.index') }}" class="nav-link">
+            <a href="{{ route('customers.index') }}" class="nav-link @if(Route::currentRouteName() === 'customers.index' || Route::currentRouteName() === 'customers.create' || Route::currentRouteName() === 'customers.edit') active @endif">
               <i class="nav-icon fas fa-users"></i>
               <p>
                 Customers
-                <i class="fas fa-angle-left right"></i>
+                <span class="badge badge-info right">{{ \App\Models\Customer::count() }}</span>
               </p>
             </a>
           </li>
@@ -53,9 +53,29 @@
               <i class="nav-icon fas fa-file"></i>
               <p>
                 Products
-                <i class="fas fa-angle-left right"></i>
+                <i class="right fas fa-angle-left"></i>
               </p>
             </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{ route('categories.index') }}" class="nav-link @if(Route::currentRouteName() === 'categories.index' || Route::currentRouteName() === 'categories.create' || Route::currentRouteName() === 'categories.edit') active @endif">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Categories</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('units.index') }}" class="nav-link @if(Route::currentRouteName() === 'units.index' || Route::currentRouteName() === 'units.create' || Route::currentRouteName() === 'units.edit') active @endif">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Units</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('items.index') }}" class="nav-link @if(Route::currentRouteName() === 'items.index' || Route::currentRouteName() === 'items.create' || Route::currentRouteName() === 'items.edit') active @endif">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Items</p>
+                </a>
+              </li>
+            </ul>
           </li>
           <li class="nav-item">
             <a href="#" class="nav-link">

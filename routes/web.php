@@ -27,5 +27,14 @@ Route::middleware(['auth'])->group(function () {
 
     // customers
     Route::resource('customers', 'CustomerController')->except('show');
+
+    // product categories
+    Route::resource('categories', 'CategoryController')->except('show');
+
+    // product units
+    Route::resource('units', 'UnitController')->except('show');
+
+    // product items
+    Route::resource('items', 'ItemController')->except('show');
 });
 
