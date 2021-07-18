@@ -36,5 +36,6 @@ Route::middleware(['auth'])->group(function () {
 
     // product items
     Route::resource('items', 'ItemController')->except('show');
+    Route::get('items/generator/{id}', 'ItemController@generator')->name('items.generator');
 });
 

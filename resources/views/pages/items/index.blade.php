@@ -35,7 +35,9 @@
                                         <td>
                                             <img src="{{ $item->image() }}" alt="" class="img-fluid" style="height:100px;width:100px">
                                         </td>
-                                        <td>{{ $item->barcode }}</td>
+                                        <td>
+                                            <a href="{{ route('items.generator', $item->id) }}" class="nav-link">{{ $item->barcode }}</a>
+                                        </td>
                                         <td>{{ $item->name }}</td>
                                         <td>{{ $item->category->name }}</td>
                                         <td>{{ $item->unit->name }}</td>

@@ -142,4 +142,13 @@ class ItemController extends Controller
         Storage::disk('public')->delete($item->image);
         return redirect()->route('items.index')->with('success','Item berhasil dihapus');
     }
+
+    public function generator($id)
+    {
+        $item = Item::findOrFail($id);
+        return view('pages.items.barcode',[
+            'title' => 'Barcode Generator',
+            'item' => $item
+        ]);
+    }
 }
