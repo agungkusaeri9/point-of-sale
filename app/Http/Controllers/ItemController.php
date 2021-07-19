@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Item;
 use App\Models\Unit;
+use Barryvdh\DomPDF\PDF;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -19,7 +21,7 @@ class ItemController extends Controller
      */
     public function index()
     {
-        $items = Item::with('category','unit')->orderBy('name','ASC')->get();
+        $items = Item::with('category','unit')->orderBy('barcode','ASC')->get();
         return view('pages.items.index',[
             'title' => 'Data Item',
             'items' => $items
@@ -150,5 +152,21 @@ class ItemController extends Controller
             'title' => 'Barcode Generator',
             'item' => $item
         ]);
+    }
+
+    public function print_barcode($id)
+    {
+        $pdf = App::make('dompdf.wrapper');
+        $item = Item::findOrFail($id);
+        $pdf->loadView('pages.items.print_barcode',['item' => $item]);
+        return $pdf->stream();
+    }
+
+    public function print_qrcode($id)
+    {
+        $pdf = App::make('dompdf.wrapper');
+        $item = Item::findOrFail($id);
+        $pdf->loadView('pages.items.print_qrcode',['item' => $item]);
+        return $pdf->stream();
     }
 }

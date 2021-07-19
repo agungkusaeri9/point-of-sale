@@ -49,7 +49,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="#" class="nav-link @if(Route::currentRouteName() === 'categories.index' || Route::currentRouteName() === 'categories.create' || Route::currentRouteName() === 'categories.edit' || Route::currentRouteName() === 'units.index' || Route::currentRouteName() === 'units.create' || Route::currentRouteName() === 'units.edit' || Route::currentRouteName() === 'items.index' || Route::currentRouteName() === 'items.create' || Route::currentRouteName() === 'items.edit') active @endif">
               <i class="nav-icon fas fa-file"></i>
               <p>
                 Products
@@ -78,13 +78,27 @@
             </ul>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="#" class="nav-link @if(Route::currentRouteName() === 'stocks.in.index' || Route::currentRouteName() === 'stocks.in.create' || Route::currentRouteName() === 'stocks.in.edit' || Route::currentRouteName() === 'stocks.out.index' || Route::currentRouteName() === 'stocks.out.create' || Route::currentRouteName() === 'stocks.out.edit') active @endif">
               <i class="nav-icon fas fa-shopping-cart"></i>
               <p>
                 Transactions
                 <i class="fas fa-angle-left right"></i>
               </p>
             </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{ route('stocks.in.index') }}" class="nav-link @if(Route::currentRouteName() === 'stocks.in.index' || Route::currentRouteName() === 'stocks.in.create' || Route::currentRouteName() === 'stocks.in.edit') active @endif">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Stock In</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('stocks.out.index') }}" class="nav-link @if(Route::currentRouteName() === 'stocks.out.index' || Route::currentRouteName() === 'stocks.out.create' || Route::currentRouteName() === 'stocks.out.edit') active @endif">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Stock Out</p>
+                </a>
+              </li>
+            </ul>
           </li>
           <li class="nav-item">
             <a href="#" class="nav-link">

@@ -7,9 +7,9 @@
                 <div class="card-header">
                     <div class="d-flex justify-content-between">
                         <h6 class="d-flex card-title">
-                            Data Items
+                            Data Barang Keluar
                         </h6>
-                        <a href="{{ route('items.create') }}" class="btn btn-primary btn-sm" id="btnAdd"><i class="fas fa-add"></i> Tambah item</a>
+                        <a href="{{ route('stocks.out.create') }}" class="btn btn-primary btn-sm" id="btnAdd"><i class="fas fa-add"></i> Tambah Barang Keluar</a>
                     </div>
                 </div>
                 <div class="card-body">
@@ -18,37 +18,35 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Image</th>
+                                    <th>Tanggal</th>
                                     <th>Barcode</th>
-                                    <th>Nama</th>
-                                    <th>Category</th>
-                                    <th>Unit</th>
-                                    <th>Price</th>
-                                    <th>Stock</th>
+                                    <th>Name</th>
+                                    <th>Satuan</th>
+                                    <th>Keterangan</th>
+                                    <th>Qty</th>
+                                    <th>Supplier</th>
+                                    <th>Kasir</th>
                                     <th style="min-width: 130px">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($items as $item)
+                                @foreach ($stocks as $stock)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $stock->created_at->translatedFormat('d/m/Y') }}</td>
+                                        <td>{{ $stock->item->barcode }}</td>
+                                        <td>{{ $stock->item->name }}</td>
+                                        <td>{{ $stock->item->unit->name }}</td>
+                                        <td>{{ $stock->description }}</td>
+                                        <td>{{ $stock->qty }}</td>
+                                        <td>{{ $stock->supplier->name ?? '-' }}</td>
+                                        <td>{{ $stock->user->name }}</td>
                                         <td>
-                                            <img src="{{ $item->image() }}" alt="" class="img-fluid" style="height:100px;width:100px">
-                                        </td>
-                                        <td>
-                                            <a href="{{ route('items.generator', $item->id) }}" class="nav-link">{{ $item->barcode }}</a>
-                                        </td>
-                                        <td>{{ $item->name }}</td>
-                                        <td>{{ $item->category->name }}</td>
-                                        <td>{{ $item->unit->name }}</td>
-                                        <td>{{ number_format($item->price) }}</td>
-                                        <td>{{ $item->stock }}</td>
-                                        <td>
-                                            <a href="{{ route('items.edit', $item->id) }}" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></a>
-                                            <form action="{{ route('items.destroy', $item->id) }}" method="post" class="d-inline">
+                                            <a href="{{ route('stocks.out.edit', $stock->id) }}" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></a>
+                                            <form action="{{ route('stocks.out.destroy', $stock->id) }}" method="post" class="d-inline">
                                                 @csrf
                                                 @method('delete')
-                                                <button class="btn btn-danger btn-sm" onclick="return confirm('Apakah yakin ingin menghapus item ini?')"><i class="fas fa-trash"></i></button>
+                                                <button class="btn btn-danger btn-sm" onclick="return confirm('Apakah yakin ingin menghapus stock ini?')"><i class="fas fa-trash"></i></button>
                                             </form>
                                         </td>
                                     </tr>

@@ -13,17 +13,17 @@
                     </div>
                 </div>
                 <div class="card-body row">
-                    <div class="col-md-6 ">
+                    <div class="col-md-6 mb-2">
                         <h6>Barcode Generator</h6>
-                        <img src="data:image/png;base64, {{ DNS2D::getBarcodePNG($item->barcode, 'PDF417') }}" alt="{{ $item->barcode }}"/>
+                        <img src="data:image/png;base64, {{ DNS2D::getBarcodePNG($item->barcode, 'PDF417') }}" alt="{{ $item->barcode }}" style="height: 100px;width:130px"/>
                         <p>{{ $item->barcode }}</p>
+                        <a href="{{ route('items.print.barcode', $item->id) }}" target="_blank" class="btn btn-sm btn-secondary">Print Barcode</a>
                     </div>
                     <div class="col-md-6">
                         <h6>QR-Code Generator</h6>
-                        <div class="w-100">
-                            {!! DNS2D::getBarcodeHTML($item->barcode, 'QRCODE') !!}
-                        </div>
+                        <img src="data:image/png;base64, {{ DNS2D::getBarcodePNG($item->barcode, 'QRCODE') }}" alt="{{ $item->barcode }}" style="height: 100px;width:100px;"/>
                         <p>{{ $item->barcode }}</p>
+                        <a href="{{ route('items.print.qrcode', $item->id) }}" target="_blank" class="btn btn-sm btn-secondary">Print Qrcode</a>
                     </div>
                 </div>
             </div>

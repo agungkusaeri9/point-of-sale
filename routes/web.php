@@ -37,5 +37,13 @@ Route::middleware(['auth'])->group(function () {
     // product items
     Route::resource('items', 'ItemController')->except('show');
     Route::get('items/generator/{id}', 'ItemController@generator')->name('items.generator');
+    Route::get('items/print/barcode/{id}', 'ItemController@print_barcode')->name('items.print.barcode');
+    Route::get('items/print/qrcode/{id}', 'ItemController@print_qrcode')->name('items.print.qrcode');
+
+    // stock
+    Route::prefix('stocks')->name('stocks.')->group(function () {
+        Route::resource('in', 'StockInController')->except('show');
+        Route::resource('out', 'StockOutController')->except('show');
+    });
 });
 

@@ -14,7 +14,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table" id="table">
+                        <table class="table table-bordered table-hover" id="table">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -40,11 +40,11 @@
                                         <td>{{ $customer->phone_number }}</td>
                                         <td>{{ $customer->address }}</td>
                                         <td>
-                                            <a href="{{ route('customers.edit', $customer->id) }}" class="btn btn-info btn-sm"><i class="fas fa-edit"></i> Edit</a>
+                                            <a href="{{ route('customers.edit', $customer->id) }}" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></a>
                                             <form action="{{ route('customers.destroy', $customer->id) }}" method="post" class="d-inline">
                                                 @csrf
                                                 @method('delete')
-                                                <button class="btn btn-danger btn-sm" onclick="return confirm('Apakah yakin ingin menghapus customer ini?')"><i class="fas fa-trash"></i> Delete</button>
+                                                <button class="btn btn-danger btn-sm" onclick="return confirm('Apakah yakin ingin menghapus customer ini?')"><i class="fas fa-trash"></i></button>
                                             </form>
                                         </td>
                                     </tr>
@@ -75,7 +75,15 @@
 
 <script type="text/javascript">
     $(function () {
-      var otable = $('#table').DataTable();
+        $('#table').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+        });
     });
 </script>
 @endpush
