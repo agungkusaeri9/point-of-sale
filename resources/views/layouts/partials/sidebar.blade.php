@@ -87,6 +87,12 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
+                <a href="{{ route('sales.create') }}" class="nav-link @if(Route::currentRouteName() === 'sales.create' || Route::currentRouteName() === 'sales.create') active @endif">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Sale</p>
+                </a>
+              </li>
+              <li class="nav-item">
                 <a href="{{ route('stocks.in.index') }}" class="nav-link @if(Route::currentRouteName() === 'stocks.in.index' || Route::currentRouteName() === 'stocks.in.create' || Route::currentRouteName() === 'stocks.in.edit') active @endif">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Stock In</p>

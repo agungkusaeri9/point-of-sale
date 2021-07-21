@@ -19,8 +19,8 @@ class CreateStocksTable extends Migration
             $table->foreignId('item_id')->constrained('items')->cascadeOnDelete()->cascadeOnUpdate();
             $table->integer('qty');
             $table->string('description')->nullable();
-            $table->foreignId('supplier_id')->nullable()->constrained('suppliers');
-            $table->foreignId('user_id')->nullable()->constrained('users');
+            $table->foreignId('supplier_id')->nullable()->constrained('suppliers')->cascadeOnDelete();
+            $table->foreignId('user_id')->nullable()->constrained('users')->cascadeOnDelete();;
             $table->timestamps();
         });
     }

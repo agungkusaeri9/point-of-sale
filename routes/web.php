@@ -45,5 +45,9 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('in', 'StockInController')->except('show');
         Route::resource('out', 'StockOutController')->except('show');
     });
+
+    // transactions
+    Route::get('sales/checkout', 'SaleController@create')->name('sales.create');
+
 });
 
