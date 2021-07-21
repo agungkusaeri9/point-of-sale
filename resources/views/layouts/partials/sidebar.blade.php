@@ -114,6 +114,14 @@
                 <i class="fas fa-angle-left right"></i>
               </p>
             </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{ route('sales.index') }}" class="nav-link @if(Route::currentRouteName() === 'sales.index') active @endif">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Sale</p>
+                </a>
+              </li>
+            </ul>
           </li>
 
           <li class="nav-header">Setting</li>

@@ -3,7 +3,7 @@
 <head>
     @include('layouts.partials.head')
 </head>
-<body class="hold-transition sidebar-mini layout-fixed">
+<body class="hold-transition sidebar-mini layout-fixed @if(Route::currentRouteName() === 'sales.create') sidebar-collapse @endif">
 <div class="wrapper">
 
   {{-- <!-- Preloader -->
