@@ -8,6 +8,7 @@ use App\Models\Sale;
 use App\Models\Item;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Str;
 
 class SaleController extends Controller
@@ -98,6 +99,7 @@ class SaleController extends Controller
         }else{
             $customer_id = request('customer_id');
         }
+        $cart = Cart::where('user_id',auth()->id())->get();
         $sale = new Sale();
         $sale->invoice = request('invoice');
         $sale->customer_id = $customer_id;
@@ -109,9 +111,24 @@ class SaleController extends Controller
         $sale->note = request('note');
         $sale->user_id = auth()->id();
         $sale->save();
+        foreach($cart as $c){
+            $sale->details()->create([
+                'item_id' => $c->item_id,
+                'qty' => $c->qty
+            ]);
+            $c->item->decrement('stock',$c->qty);
+        }
 
         $cart = Cart::where('user_id', auth()->id())->delete();
         return response()->json(['success' => 'Berhasil']);
+    }
+
+    public function show($id)
+    {
+        $sale = Sale::findOrFail($id);
+        return view('pages.transactions.sales.show',[
+            'sale' => $sale
+        ]);
     }
 
     public function destroy($id)

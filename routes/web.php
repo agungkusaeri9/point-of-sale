@@ -48,16 +48,25 @@ Route::middleware(['auth'])->group(function () {
 
     
     // transactions
-    Route::get('sales', 'SaleController@index')->name('sales.index');
-    Route::post('sales', 'SaleController@index')->name('sales.filter');
-    Route::delete('sales/{id}', 'SaleController@destroy')->name('sales.destroy')->middleware('role:admin');
-    Route::get('sales/checkout', 'SaleController@create')->name('sales.create');
-    Route::post('sales/checkout', 'SaleController@store')->name('sales.store');
-
+    Route::prefix('sales')->group(function () {
+        Route::get('', 'SaleController@index')->name('sales.index');
+        Route::post('', 'SaleController@index')->name('sales.filter');
+        Route::get('/checkout', 'SaleController@create')->name('sales.create');
+        Route::post('/checkout', 'SaleController@store')->name('sales.store');
+        Route::get('/{id}', 'SaleController@show')->name('sales.show');
+        Route::delete('/{id}', 'SaleController@destroy')->name('sales.destroy')->middleware('role:admin');
+    });
+    
     // cart
-    Route::post('cart', 'CartController@store')->name('cart.store');
-    Route::delete('sales/checkout/{id}', 'CartController@destroy')->name('cart.destroy');
-    Route::delete('cart/delete', 'CartController@deleteAll')->name('cart.deleteAll');
+    Route::prefix('cart')->group(function () {
+        Route::post('cart', 'CartController@store')->name('cart.store');
+        Route::delete('cart/{id}', 'CartController@destroy')->name('cart.destroy');
+        Route::delete('cart/delete', 'CartController@deleteAll')->name('cart.deleteAll');
+    });
 
+    // report
+    Route::prefix('report')->name('report.')->group(function () {
+        Route::get('sale', 'ReportController@sale')->name('sale.all');
+    });
 });
 
