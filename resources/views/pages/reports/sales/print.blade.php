@@ -42,14 +42,14 @@
         <tbody>
             @foreach ($sales as $sale)
                 <tr>
-                    <td>{{ $loop->iteration }}</td>
+                    <td style="text-align:center;">{{ $loop->iteration }}</td>
                     <td>{{ $sale->created_at->translatedFormat('d/m/y H:i:s') }}</td>
                     <td>{{ $sale->invoice }}</td>
-                    <td>{{ number_format($sale->total_price) }}</td>
-                    <td>{{ number_format($sale->discount) }}</td>
-                    <td>{{ number_format($sale->final_price) }}</td>
+                    <td style="text-align:right">{{ number_format($sale->total_price) }}</td>
+                    <td style="text-align:right">{{ number_format($sale->discount) }}</td>
+                    <td style="text-align:right">{{ number_format($sale->final_price) }}</td>
                     <td>{{ $sale->customer->name ?? 'umum' }}</td>
-                    <td>{{ $sale->user->name }}</td>
+                    <td style="text-align:center;">{{ $sale->user->name }}</td>
                 </tr>
             @endforeach
         </tbody>
