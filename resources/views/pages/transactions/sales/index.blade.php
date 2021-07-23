@@ -68,12 +68,6 @@
                             </form>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <a href="{{ route('report.sale.all') }}" class="btn btn-secondary" id="printAll" target="_blank"><i class="fas fa-print"></i> Print</a>
-                            <button class="btn btn-primary"><i class="fas fa-file-excel"></i> Export</button>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -87,6 +81,12 @@
                     </h6>
                 </div>
                 <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <a href="{{ route('report.sale.all') }}" class="btn btn-secondary" id="printAll" target="_blank"><i class="fas fa-print"></i> Print</a>
+                            <a class="btn btn-primary" href="{{ route('report.sale.export') }}" target="_blank"><i class="fas fa-file-excel"></i> Export</a>
+                        </div>
+                    </div>
                     <div class="table-responsive">
                         <table class="table table-bordered table-hover" id="table">
                             <thead>
@@ -178,7 +178,7 @@
         $('#table').DataTable({
             "paging": true,
             "lengthChange": false,
-            "searching": true,
+            "searching": false,
             "ordering": true,
             "info": true,
             "autoWidth": false,

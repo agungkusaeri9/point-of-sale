@@ -66,7 +66,8 @@ Route::middleware(['auth'])->group(function () {
 
     // report
     Route::prefix('report')->name('report.')->group(function () {
-        Route::get('sale', 'ReportController@sale')->name('sale.all');
+        Route::get('sale', 'ReportController@salePrint')->name('sale.all');
+        Route::get('sale/export', 'ReportController@saleExport')->name('sale.export');
     });
 });
 
