@@ -14,7 +14,13 @@ class CartController extends Controller
             'item_id' => ['required']
         ]);
 
+        $qty = request('qty');
+
         $item = Item::findOrFail(request('item_id'));
+
+        if ($item->stock < $qty) {
+            return redirect()->back()->with('failed', 'Stok tidak cukup!');
+        }
 
         $price_total = request('qty') * $item->price;
 
@@ -27,7 +33,6 @@ class CartController extends Controller
         $cart->save();
 
         return redirect()->back();
-
     }
 
     public function destroy($id)
@@ -39,7 +44,7 @@ class CartController extends Controller
     public function deleteAll()
     {
         Cart::where('user_id', auth()->id())->delete();
-        
+
         return redirect()->back();
     }
 }

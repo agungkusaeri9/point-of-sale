@@ -19,36 +19,34 @@ class SaleController extends Controller
         $to = request('to');
         $customer_id = request('customer_id');
         $invoice = request('invoice');
-        if(request()->all())
-        {
-            if($invoice){
-                $sales = Sale::with('customer','user')->orderBy('id','DESC')->where('invoice',$invoice)->get();
-            }else{
+        if (request()->all()) {
+            if ($invoice) {
+                $sales = Sale::with('customer', 'user')->orderBy('id', 'DESC')->where('invoice', $invoice)->get();
+            } else {
                 // jika dari dan sampai diisi
-                if($from && $to){
-                    if($customer_id === 'all'){
-                        $sales = Sale::with('customer','user')->orderBy('id','DESC')->whereBetween('created_at',[$from,$to])->get();
-                    }elseif($customer_id === 'umum'){
-                        $sales = Sale::with('customer','user')->orderBy('id','DESC')->whereBetween('created_at',[$from,$to])->where('customer_id',NULL)->get();
-                    }else{
-                        $sales = Sale::with('customer','user')->orderBy('id','DESC')->whereBetween('created_at',[$from,$to])->where('customer_id',$customer_id)->get();
+                if ($from && $to) {
+                    if ($customer_id === 'all') {
+                        $sales = Sale::with('customer', 'user')->orderBy('id', 'DESC')->whereBetween('created_at', [$from, $to])->get();
+                    } elseif ($customer_id === 'umum') {
+                        $sales = Sale::with('customer', 'user')->orderBy('id', 'DESC')->whereBetween('created_at', [$from, $to])->where('customer_id', NULL)->get();
+                    } else {
+                        $sales = Sale::with('customer', 'user')->orderBy('id', 'DESC')->whereBetween('created_at', [$from, $to])->where('customer_id', $customer_id)->get();
                     }
-                }else{
-                    if($customer_id === 'all'){
-                        $sales = Sale::with('customer','user')->orderBy('id','DESC')->get();
-                    }elseif($customer_id === 'umum'){
-                        $sales = Sale::with('customer','user')->orderBy('id','DESC')->where('customer_id',NULL)->get();
-                    }else{
-                        $sales = Sale::with('customer','user')->orderBy('id','DESC')->where('customer_id',$customer_id)->get();
+                } else {
+                    if ($customer_id === 'all') {
+                        $sales = Sale::with('customer', 'user')->orderBy('id', 'DESC')->get();
+                    } elseif ($customer_id === 'umum') {
+                        $sales = Sale::with('customer', 'user')->orderBy('id', 'DESC')->where('customer_id', NULL)->get();
+                    } else {
+                        $sales = Sale::with('customer', 'user')->orderBy('id', 'DESC')->where('customer_id', $customer_id)->get();
                     }
                 }
-                
             }
-        }else{
-            $sales = Sale::with('customer','user')->orderBy('id', 'DESC')->get();
+        } else {
+            $sales = Sale::with('customer', 'user')->orderBy('id', 'DESC')->get();
         }
-        $customers = Customer::orderBy('name','asc')->get();
-        return view('pages.transactions.sales.index',[
+        $customers = Customer::orderBy('name', 'asc')->get();
+        return view('pages.transactions.sales.index', [
             'title' => 'History Penjualan',
             'sales' => $sales,
             'customers' => $customers
@@ -58,30 +56,27 @@ class SaleController extends Controller
     {
         $customers = Customer::get();
         $sale = Sale::latest()->first();
-        $items = Item::orderBy('barcode','ASC')->get();
+        $items = Item::orderBy('barcode', 'ASC')->get();
         $date = Carbon::now()->translatedFormat('ymd');
-        if($sale === NULL)
-        {
+        if ($sale === NULL) {
             $pad = Str::padLeft(1, 3, "0");
             $invoice = 'MI' . $date . $pad;
-        }else{
+        } else {
             $invoiceLatest = $sale->invoice;
-            $bag2 = Str::substr($invoiceLatest,2,6);
-            if($bag2 == $date)
-            {
-                $bag3Latest = $bag2 = Str::substr($invoiceLatest,8,6);
+            $bag2 = Str::substr($invoiceLatest, 2, 6);
+            if ($bag2 == $date) {
+                $bag3Latest = $bag2 = Str::substr($invoiceLatest, 8, 6);
                 $bag3 = $bag3Latest + 1;
                 $pad = Str::padLeft($bag3, 3, "0");
                 $invoice = 'MI' . $date . $pad;
-            }else{
+            } else {
                 $pad = Str::padLeft(1, 3, "0");
                 $invoice = 'MI' . $date . $pad;
             }
-
         }
         $cart = Cart::with('item')->where('user_id', auth()->id())->get();
-        $sub_total =Cart::where('user_id',auth()->id())->sum('price_total');
-        return view('pages.transactions.sales.create',[
+        $sub_total = Cart::where('user_id', auth()->id())->sum('price_total');
+        return view('pages.transactions.sales.create', [
             'title' => 'Checkout Penjualan',
             'customers' => $customers,
             'invoice' => $invoice,
@@ -93,13 +88,12 @@ class SaleController extends Controller
 
     public function store()
     {
-        if(request('customer_id') === "umum")
-        {
+        if (request('customer_id') === "umum") {
             $customer_id = NULL;
-        }else{
+        } else {
             $customer_id = request('customer_id');
         }
-        $cart = Cart::where('user_id',auth()->id())->get();
+        $cart = Cart::where('user_id', auth()->id())->get();
         $sale = new Sale();
         $sale->invoice = request('invoice');
         $sale->customer_id = $customer_id;
@@ -111,12 +105,12 @@ class SaleController extends Controller
         $sale->note = request('note');
         $sale->user_id = auth()->id();
         $sale->save();
-        foreach($cart as $c){
+        foreach ($cart as $c) {
             $sale->details()->create([
                 'item_id' => $c->item_id,
                 'qty' => $c->qty
             ]);
-            $c->item->decrement('stock',$c->qty);
+            $c->item->decrement('stock', $c->qty);
         }
 
         $cart = Cart::where('user_id', auth()->id())->delete();
@@ -126,7 +120,7 @@ class SaleController extends Controller
     public function show($id)
     {
         $sale = Sale::findOrFail($id);
-        return view('pages.transactions.sales.show',[
+        return view('pages.transactions.sales.show', [
             'sale' => $sale
         ]);
     }
@@ -134,6 +128,6 @@ class SaleController extends Controller
     public function destroy($id)
     {
         Sale::destroy($id);
-        return redirect()->back()->with('success','Transaksi berhasil dihapus');
+        return redirect()->back()->with('success', 'Transaksi berhasil dihapus');
     }
 }
